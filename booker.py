@@ -1,6 +1,7 @@
 from selenium import webdriver
 from datetime import datetime  
 from datetime import timedelta  
+from decrypt import BookerConfig
 import time
 import schedule
 import calendar
@@ -43,8 +44,9 @@ def logout(driver):
 
 def doBooking():
 	logging.info(DEBUG_PREFIX+"Start")
-	users = ["boyala@ualberta.ca","rukhmani@ualberta.ca"]
-	pwds = ["Hitachi123!","Jaishriram24"]
+	BookerConfig.load_file()
+	users = BookerConfig.getUsers()
+	pwds = BookerConfig.getPwds()
 	for i in range(len(users)):
 		try:
 			logging.info(DEBUG_PREFIX+"Start for user "+str(users[i]))
