@@ -8,7 +8,7 @@ import os
 import logging
 import traceback
 
-logging.basicConfig(filename=datetime.now().strftime('booker_%d_%m_%Y.log'),level=logging.INFO,format='%(asctime)s %(levelname)-8s %(message)s')
+logging.basicConfig(filename="../"+datetime.now().strftime('booker_%d_%m_%Y.log'),level=logging.INFO,format='%(asctime)s %(levelname)-8s %(message)s')
 blacklistDates = [["Fri","Sat","Sun"],["Sat","Sun"]]
 DEBUG_PREFIX = " [doBooking] "
 def isExistBooking(index,driver):
@@ -49,7 +49,7 @@ def doBooking():
 		try:
 			logging.info(DEBUG_PREFIX+"Start for user "+str(users[i]))
 			logging.info(DEBUG_PREFIX+"Ctreating web driver")
-			driver = webdriver.Chrome('/home/bijinbenny/Project/Selenium/chromedriver')
+			driver = webdriver.Chrome('/home/bijinbenny/Project/Selenium/book-myGym-UofA/chromedriver')
 
 			driver.get("https://www.activityreg.ualberta.ca/UOFA/public/Logon/Logon")
 			logging.info(DEBUG_PREFIX+"Sending username")
@@ -90,13 +90,14 @@ def doBooking():
 				if(bookTime.text == "6:00 PM"):
 					logging.info(DEBUG_PREFIX+"Time 6 PM found")
 					row.find_elements_by_tag_name("td")[6].click()
-					time.sleep(5)
+					time.sleep(10)
 					driver.find_element_by_css_selector('a.btn-primary').click()
 					logging.info(DEBUG_PREFIX+"Booking done")
 		except Exception as e: 
 			logging.exception("message")
 		logging.info(DEBUG_PREFIX+"End for user "+str(users[i]))					
-	logging.info(DEBUG_PREFIX+"End")	
+	logging.info(DEBUG_PREFIX+"End")
+		
 
 if(os.fork()>0):
 	exit()
