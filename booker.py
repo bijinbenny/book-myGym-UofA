@@ -8,12 +8,21 @@ import calendar
 import os
 import logging
 import traceback
+from logging.handlers import TimedRotatingFileHandler
 
-logging.basicConfig(filename="../"+datetime.now().strftime('booker_%d_%m_%Y.log'),level=logging.INFO,format='%(asctime)s %(levelname)-8s %(message)s')
+handler = TimedRotatingFileHandler('../booker.log', when="midnight", interval=1)
+handler.suffix = "%Y%m%d"
+logging.basicConfig(filename="../booker.log",level=logging.INFO,format='%(asctime)s %(levelname)-8s %(message)s')
+logger = logging.getLogger('booker')
+logger.addHandler(handler)
+
 blacklistDates = [["Fri","Sat","Sun"],["Sat","Sun"]]
 DEBUG_PREFIX = " [doBooking] "
+
+
 def isExistBooking(index,driver):
 	global blacklistDates
+	logging.info(DEBUG_PREFIX+"Index : "+str(index))
 	targetDate = datetime.now() + timedelta(days=5)  
 	logging.info(DEBUG_PREFIX+("Target date : "+ str(targetDate)))
 	targetDay = calendar.day_name[targetDate.weekday()][:3]
@@ -50,7 +59,7 @@ def doBooking():
 	for i in range(len(users)):
 		try:
 			logging.info(DEBUG_PREFIX+"Start for user "+str(users[i]))
-			logging.info(DEBUG_PREFIX+"Ctreating web driver")
+			logging.info(DEBUG_PREFIX+"Creating web driver")
 			driver = webdriver.Chrome('/home/bijinbenny/Project/Selenium/book-myGym-UofA/chromedriver')
 
 			driver.get("https://www.activityreg.ualberta.ca/UOFA/public/Logon/Logon")
@@ -106,11 +115,11 @@ if(os.fork()>0):
 else:
 	
 	#Test code
-	#doBooking()
+	doBooking()
 	
-	 logging.info("Start thread....")
-	 schedule.every(1).hour.do(doBooking) 
-	 logging.info("Schedule job registered")
-	 while True: 
-	 	schedule.run_pending() 
-	 	time.sleep(1) 
+	 # logging.info("Start thread....")
+	 # schedule.every(1).hour.do(doBooking) 
+	 # logging.info("Schedule job registered")
+	 # while True: 
+	 # 	schedule.run_pending() 
+	 # 	time.sleep(1) 
