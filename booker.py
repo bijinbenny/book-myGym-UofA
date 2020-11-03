@@ -10,9 +10,9 @@ import logging
 import traceback
 from logging.handlers import TimedRotatingFileHandler
 
-handler = TimedRotatingFileHandler('../booker.log', when="midnight", interval=1)
+handler = TimedRotatingFileHandler('logs/booker.log', when="midnight", interval=1)
 handler.suffix = "%Y%m%d"
-logging.basicConfig(filename="../booker.log",level=logging.INFO,format='%(asctime)s %(levelname)-8s %(message)s')
+logging.basicConfig(filename="logs/booker.log",level=logging.INFO,format='%(asctime)s %(levelname)-8s %(message)s')
 logger = logging.getLogger('booker')
 logger.addHandler(handler)
 
@@ -115,11 +115,11 @@ if(os.fork()>0):
 else:
 	
 	#Test code
-	doBooking()
+	#doBooking()
 	
-	 # logging.info("Start thread....")
-	 # schedule.every(1).hour.do(doBooking) 
-	 # logging.info("Schedule job registered")
-	 # while True: 
-	 # 	schedule.run_pending() 
-	 # 	time.sleep(1) 
+	 logging.info("Start thread....")
+	 schedule.every(1).hour.do(doBooking) 
+	 logging.info("Schedule job registered")
+	 while True: 
+	 	schedule.run_pending() 
+	 	time.sleep(1) 
