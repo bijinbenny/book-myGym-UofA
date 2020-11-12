@@ -34,10 +34,10 @@ def isExistBooking(index,driver):
 	
 	apptTable = bookings.find_element_by_class_name("table")
 	rows  = apptTable.find_elements_by_tag_name("tr")
-	for index in range(len(rows)):
-		if(index  == 0):
+	for row_index in range(len(rows)):
+		if(row_index  == 0):
 			continue
-		row  = rows[index]
+		row  = rows[row_index]
 		day  = row.find_elements_by_tag_name("td")[0]
 		if(day.text[:3] == targetDay):
 			return True	
@@ -104,10 +104,18 @@ def doBooking():
 					time.sleep(10)
 					driver.find_element_by_css_selector('a.btn-primary').click()
 					logging.info(DEBUG_PREFIX+"Booking done")
+					time.sleep(10)
 		except Exception as e: 
-			logging.exception("message")
+			logging.exception("Exception occured")
 		logging.info(DEBUG_PREFIX+"End for user "+str(users[i]))					
+		logging.info(DEBUG_PREFIX+"Start tear down")
+		try:
+			if(driver):
+				driver.close()
+		except Exception as e: 
+			logging.exception("Exception occured during teardown")
 	logging.info(DEBUG_PREFIX+"End")
+
 		
 
 if(os.fork()>0):
@@ -118,7 +126,7 @@ else:
 	#doBooking()
 	
 	 logging.info("Start thread....")
-	 schedule.every(1).hour.do(doBooking) 
+	 schedule.every(2).hours.do(doBooking) 
 	 logging.info("Schedule job registered")
 	 while True: 
 	 	schedule.run_pending() 
